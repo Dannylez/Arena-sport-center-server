@@ -3,16 +3,27 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon src/index"
+    "start": "nodemon src/index.js --exec babel-node"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "cors": "^2.8.5",
+    "date-fns": "^2.30.0",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
+    "joi": "^17.9.2",
+    "mongoose": "^8.0.0",
     "nodemon": "^3.0.1"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.23.4",
+    "@babel/core": "^7.23.5",
+    "@babel/node": "^7.22.19",
+    "@babel/preset-env": "^7.23.5"
   }
 }

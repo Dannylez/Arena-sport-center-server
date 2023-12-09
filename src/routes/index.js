@@ -1,0 +1,18 @@
+import { Router } from 'express';
+import admin from './admin.js';
+import classes from './class.js';
+import member from './member.js';
+import payment from './payment.js';
+import trainer from './trainer.js';
+import contract from './contract.js';
+
+const router = Router();
+
+router.use('/admin', admin);
+router.use('/class', classes);
+router.use('/member', member);
+router.use('/payment', payment);
+router.use('/trainer', trainer);
+router.use('/contract', contract);
+
+export default router;
