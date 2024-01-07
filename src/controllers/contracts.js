@@ -4,7 +4,7 @@ import Contract from '../models/contract.js';
 
 const getAllContracts = async (req, res) => {
   try {
-    const contracts = await Contract.find();
+    const contracts = await Contract.find().populate('activity');
     return res.status(200).json({
       data: contracts,
     });
@@ -26,7 +26,7 @@ const getContractById = async (req, res) => {
     });
   }
   try {
-    const contract = await Contract.findById(id);
+    const contract = await Contract.findById(id).populate('activity');
     if (!contract) {
       return res.status(404).json({
         message: `El servicio que estás buscando no existe`,
@@ -46,7 +46,7 @@ const getContractById = async (req, res) => {
 };
 
 const createContract = async (req, res) => {
-  const { name, description, price } = req.body;
+  const { name, activity, description, price } = req.body;
   try {
     const alreadyExists = await Contract.findOne({ name });
     if (alreadyExists) {
@@ -57,6 +57,7 @@ const createContract = async (req, res) => {
     }
     const contractCreated = await Contract.create({
       name,
+      activity,
       description,
       price,
     });
@@ -81,7 +82,7 @@ const updateContract = async (req, res) => {
       data: undefined,
     });
   }
-  const { name, description, price } = req.body;
+  const { name, activity, description, price } = req.body;
   try {
     const contractToUpdate = await Contract.findById(id);
     if (!contractToUpdate) {
@@ -99,6 +100,7 @@ const updateContract = async (req, res) => {
     }
     const contractUpdated = await Contract.findByIdAndUpdate(id, {
       name,
+      activity,
       description,
       price,
     });

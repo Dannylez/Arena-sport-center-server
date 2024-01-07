@@ -9,6 +9,11 @@ const contractSchema = new Schema({
     maxLength: 20,
     required: true,
   },
+  activity: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Activity',
+    required: true,
+  },
   description: {
     type: String,
     required: true,

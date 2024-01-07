@@ -70,10 +70,10 @@ const createMember = async (req, res) => {
     contracts,
   } = req.body;
   try {
-    const alreadyExists = await Member.findOne({ $or: [{ ci }, { email }] });
+    const alreadyExists = await Member.findOne({ ci });
     if (alreadyExists) {
       return res.status(400).json({
-        message: 'Ya existe un alumno con ese email o ci',
+        message: 'Ya existe un alumno con ese ci',
         data: req.body,
       });
     }
@@ -132,28 +132,30 @@ const updateMember = async (req, res) => {
         data: undefined,
       });
     }
-    const aMemberAlreadyHas = await Member.findOne({
-      $or: [{ ci }, { email }],
-    });
+    const aMemberAlreadyHas = await Member.findOne({ ci });
     if (aMemberAlreadyHas && !aMemberAlreadyHas?._id.equals(new ObjectId(id))) {
       return res.status(400).json({
-        message: 'Ya existe un alumno con ese email o ci',
+        message: 'Ya existe un alumno con ese ci',
         data: req.body,
       });
     }
-    const memberUpdated = await Member.findByIdAndUpdate(id, {
-      firstName,
-      lastName,
-      ci,
-      phone,
-      email,
-      birthDay,
-      medService,
-      healthCardUpToDate,
-      healthCardVigency,
-      classes,
-      contracts,
-    });
+    const memberUpdated = await Member.findByIdAndUpdate(
+      id,
+      {
+        firstName,
+        lastName,
+        ci,
+        phone,
+        email,
+        birthDay,
+        medService,
+        healthCardUpToDate,
+        healthCardVigency,
+        classes,
+        contracts,
+      },
+      { new: true },
+    );
     return res.status(200).json({
       message: 'Alumno actualizado exitosamente!',
       data: memberUpdated,

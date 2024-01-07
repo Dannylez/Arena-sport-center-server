@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import bcryptPlugin from 'mongoose-bcrypt';
 
 const { Schema } = mongoose;
 
@@ -24,6 +25,7 @@ const trainerSchema = new Schema({
     minLength: 7,
     maxLength: 12,
     required: true,
+    bcrypt: true,
   },
   ci: {
     type: Number,
@@ -55,9 +57,10 @@ const trainerSchema = new Schema({
     required: true,
   },
   feeHistory: {
-    type: [{ String, Number }],
+    type: [{ date: String, amount: Number }],
     required: true,
   },
 });
 
+trainerSchema.plugin(bcryptPlugin);
 export default mongoose.model('Trainer', trainerSchema);

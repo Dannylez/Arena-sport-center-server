@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import activity from './activity.js';
 import admin from './admin.js';
 import classes from './class.js';
 import member from './member.js';
@@ -8,6 +9,7 @@ import contract from './contract.js';
 
 const router = Router();
 
+router.use('/activity', activity);
 router.use('/admin', admin);
 router.use('/class', classes);
 router.use('/member', member);

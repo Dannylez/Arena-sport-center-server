@@ -1,6 +1,9 @@
+import { format } from 'date-fns';
 import mongoose from 'mongoose';
 
 const { Schema } = mongoose;
+const now = new Date();
+const today = format(now, 'dd/MM/yyy');
 
 const memberSchema = new Schema({
   firstName: {
@@ -16,20 +19,18 @@ const memberSchema = new Schema({
     required: true,
   },
   ci: {
-    type: Number,
+    type: String,
     minLength: 7,
     maxLength: 8,
     required: true,
   },
   phone: {
-    type: Number,
+    type: String,
     minLength: 7,
     maxLength: 15,
-    required: true,
   },
   email: {
     type: String,
-    required: true,
   },
   birthDay: {
     type: String,
@@ -37,15 +38,12 @@ const memberSchema = new Schema({
   },
   medService: {
     type: String,
-    required: true,
   },
   healthCardUpToDate: {
     type: Boolean,
-    required: true,
   },
   healthCardVigency: {
     type: String,
-    required: true,
   },
   classes: {
     type: [mongoose.Schema.Types.ObjectId],
@@ -57,6 +55,25 @@ const memberSchema = new Schema({
     ref: 'Contract',
     required: true,
   },
+});
+
+memberSchema.pre('save', function (next) {
+  if (!this.phone) {
+    this.phone = '';
+  }
+  if (!this.email) {
+    this.email = '';
+  }
+  if (!this.medService) {
+    this.medService = '';
+  }
+  if (!this.healthCardUpToDate) {
+    this.healthCardUpToDate = false;
+  }
+  if (!this.healthCardVigency) {
+    this.healthCardVigency = today;
+  }
+  next();
 });
 
 export default mongoose.model('Member', memberSchema);

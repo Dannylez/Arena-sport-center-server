@@ -3,10 +3,9 @@ import mongoose from 'mongoose';
 const { Schema } = mongoose;
 
 const classSchema = new Schema({
-  name: {
-    type: String,
-    minLength: 2,
-    maxLength: 20,
+  activity: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Activity',
     required: true,
   },
   day: {

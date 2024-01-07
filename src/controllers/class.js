@@ -29,7 +29,10 @@ const existingClass = async (req, res, day, start, end, room) => {
 
 const getAllClasses = async (req, res) => {
   try {
-    const classes = await Class.find().populate('trainer').populate('members');
+    const classes = await Class.find()
+      .populate('trainer')
+      .populate('members')
+      .populate('activity');
     return res.status(200).json({
       data: classes,
     });
@@ -53,7 +56,8 @@ const getClassById = async (req, res) => {
   try {
     const selectedClass = await Class.findById(id)
       .populate('trainer')
-      .populate('members');
+      .populate('members')
+      .populate('activity');
     if (!selectedClass) {
       return res.status(404).json({
         message: `La clase que estás buscando no existe`,
@@ -73,7 +77,7 @@ const getClassById = async (req, res) => {
 };
 
 const createClass = async (req, res) => {
-  const { name, day, startsAt, endsAt, room, trainer, members } = req.body;
+  const { activity, day, startsAt, endsAt, room, trainer, members } = req.body;
   try {
     const classExists = await existingClass(
       req,
@@ -90,14 +94,17 @@ const createClass = async (req, res) => {
       });
     }
     const classCreated = await Class.create({
-      name,
+      activity,
       day,
       startsAt,
       endsAt,
       room,
       trainer,
       members,
-    });
+    })
+      .populate('trainer')
+      .populate('members')
+      .populate('activity');
     return res.status(200).json({
       message: 'Clase creada exitosamente!',
       data: classCreated,
@@ -119,7 +126,7 @@ const updateClass = async (req, res) => {
       data: undefined,
     });
   }
-  const { name, day, startsAt, endsAt, room, trainer, members } = req.body;
+  const { activity, day, startsAt, endsAt, room, trainer, members } = req.body;
   try {
     const classToUpdate = await Class.findById(id);
     if (!classToUpdate) {
@@ -141,15 +148,22 @@ const updateClass = async (req, res) => {
         message: 'Ya existe una clase en ese día, horario y lugar',
         data: req.body,
       });
-    const classUpdated = await Class.findByIdAndUpdate(id, {
-      name,
-      day,
-      startsAt,
-      endsAt,
-      room,
-      trainer,
-      members,
-    });
+    const classUpdated = await Class.findByIdAndUpdate(
+      id,
+      {
+        activity,
+        day,
+        startsAt,
+        endsAt,
+        room,
+        trainer,
+        members,
+      },
+      { new: true },
+    )
+      .populate('trainer')
+      .populate('members')
+      .populate('activity');
     return res.status(200).json({
       message: 'Clase actualizada exitosamente!',
       data: classUpdated,
