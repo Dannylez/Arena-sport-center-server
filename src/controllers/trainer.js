@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 import { ObjectId } from 'mongodb';
 import Trainer from '../models/trainer.js';
+import bcrypt from 'bcrypt';
 
 const getAllTrainers = async (req, res) => {
   try {
@@ -66,6 +67,7 @@ const createTrainer = async (req, res) => {
     feeHistory,
   } = req.body;
   try {
+    const salt = await bcrypt.genSalt(10);
     const alreadyExists = await Trainer.findOne({ $or: [{ ci }, { email }] });
     if (alreadyExists) {
       return res.status(400).json({
@@ -73,11 +75,13 @@ const createTrainer = async (req, res) => {
         data: req.body,
       });
     }
+
+    const passHash = await bcrypt.hash(password, salt);
     const trainerCreated = await Trainer.create({
       firstName,
       lastName,
       email,
-      password,
+      password: passHash,
       ci,
       birthDay,
       phone,
@@ -191,6 +195,26 @@ const deleteTrainer = async (req, res) => {
     });
   }
 };
+
+/* const login = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    const user = await Trainer.findOne({ email });
+    const match = await bcrypt.compare(password, user.password);
+    if (match) {
+      return res.status(200).json({
+        message: 'MATCH',
+        token: user._id,
+      });
+    } else {
+      return res.status(200).json({
+        message: 'NO MATCH',
+      });
+    }
+  } catch (error) {
+    console.log(error);
+  }
+}; */
 
 export default {
   getAllTrainers,

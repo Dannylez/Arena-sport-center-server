@@ -6,6 +6,7 @@ import member from './member.js';
 import payment from './payment.js';
 import trainer from './trainer.js';
 import contract from './contract.js';
+import auth from './auth.js';
 
 const router = Router();
 
@@ -16,5 +17,6 @@ router.use('/member', member);
 router.use('/payment', payment);
 router.use('/trainer', trainer);
 router.use('/contract', contract);
+router.use('/auth', auth);
 
 export default router;

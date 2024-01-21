@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import bcryptPlugin from 'mongoose-bcrypt';
+/* import bcryptPlugin from 'mongoose-bcrypt'; */
 
 const { Schema } = mongoose;
 
@@ -23,9 +23,8 @@ const trainerSchema = new Schema({
   password: {
     type: String,
     minLength: 7,
-    maxLength: 12,
     required: true,
-    bcrypt: true,
+    /*     bcrypt: true, */
   },
   ci: {
     type: Number,
@@ -62,5 +61,5 @@ const trainerSchema = new Schema({
   },
 });
 
-trainerSchema.plugin(bcryptPlugin);
+/* trainerSchema.plugin(bcryptPlugin); */
 export default mongoose.model('Trainer', trainerSchema);

@@ -89,7 +89,7 @@ const createClass = async (req, res) => {
     );
     if (classExists !== undefined) {
       return res.status(400).json({
-        message: 'Ya existe una clase en ese día, horario y lugar',
+        message: 'La clase se superpone con otra',
         data: req.body,
       });
     }
@@ -101,10 +101,7 @@ const createClass = async (req, res) => {
       room,
       trainer,
       members,
-    })
-      .populate('trainer')
-      .populate('members')
-      .populate('activity');
+    });
     return res.status(200).json({
       message: 'Clase creada exitosamente!',
       data: classCreated,
@@ -145,7 +142,7 @@ const updateClass = async (req, res) => {
     );
     if (classExists !== undefined && !classExists?._id.equals(new ObjectId(id)))
       return res.status(400).json({
-        message: 'Ya existe una clase en ese día, horario y lugar',
+        message: 'La clase se superpone con otra',
         data: req.body,
       });
     const classUpdated = await Class.findByIdAndUpdate(

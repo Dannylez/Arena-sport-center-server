@@ -43,8 +43,14 @@ const classSchema = new Schema({
   members: {
     type: [mongoose.Schema.Types.ObjectId],
     ref: 'Member',
-    required: true,
   },
+});
+
+classSchema.pre('save', function (next) {
+  if (!this.members) {
+    this.members = [];
+  }
+  next();
 });
 
 export default mongoose.model('Class', classSchema);
