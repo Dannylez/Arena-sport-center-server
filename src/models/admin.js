@@ -1,5 +1,4 @@
 import mongoose from 'mongoose';
-import bcryptPlugin from 'mongoose-bcrypt';
 
 const { Schema } = mongoose;
 
@@ -29,9 +28,7 @@ const adminSchema = new Schema({
   password: {
     type: String,
     minLength: 7,
-    maxLength: 12,
     required: true,
-    bcrypt: true,
   },
   ci: {
     type: Number,
@@ -41,5 +38,4 @@ const adminSchema = new Schema({
   },
 });
 
-adminSchema.plugin(bcryptPlugin);
 export default mongoose.model('Admin', adminSchema);

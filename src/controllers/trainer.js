@@ -196,26 +196,6 @@ const deleteTrainer = async (req, res) => {
   }
 };
 
-/* const login = async (req, res) => {
-  try {
-    const { email, password } = req.body;
-    const user = await Trainer.findOne({ email });
-    const match = await bcrypt.compare(password, user.password);
-    if (match) {
-      return res.status(200).json({
-        message: 'MATCH',
-        token: user._id,
-      });
-    } else {
-      return res.status(200).json({
-        message: 'NO MATCH',
-      });
-    }
-  } catch (error) {
-    console.log(error);
-  }
-}; */
-
 export default {
   getAllTrainers,
   getTrainerById,

@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 import { ObjectId } from 'mongodb';
 import Admin from '../models/admin.js';
+import bcrypt from 'bcrypt';
 
 const getAllAdmins = async (req, res) => {
   try {
@@ -48,6 +49,7 @@ const getAdminById = async (req, res) => {
 const createAdmin = async (req, res) => {
   const { firstName, lastName, email, phone, password, ci } = req.body;
   try {
+    const salt = await bcrypt.genSalt(10);
     const alreadyExists = await Admin.findOne({ $or: [{ ci }, { email }] });
     if (alreadyExists) {
       return res.status(400).json({
@@ -55,12 +57,13 @@ const createAdmin = async (req, res) => {
         data: req.body,
       });
     }
+    const passHash = await bcrypt.hash(password, salt);
     const adminCreated = await Admin.create({
       firstName,
       lastName,
       email,
       phone,
-      password,
+      password: passHash,
       ci,
     });
     return res.status(200).json({
@@ -68,10 +71,9 @@ const createAdmin = async (req, res) => {
       data: adminCreated,
     });
   } catch (error) {
+    console.log(error);
     return res.status(500).json({
-      message: 'Error',
-      data: undefined,
-      error,
+      message: error,
     });
   }
 };

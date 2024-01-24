@@ -4,12 +4,10 @@ import app from './app.js';
 
 dotenv.config();
 
-const { PORT } = process.env;
+const { PORT, DB_URL } = process.env;
 
 mongoose
-  .connect(
-    'mongodb+srv://Danylez:stardew96@cluster0.aom5gxg.mongodb.net/Arenas-Gym',
-  )
+  .connect(DB_URL)
   .then(() => console.log('CONNECTED DB'))
   .then(() =>
     app.listen(PORT, () => {
