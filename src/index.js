@@ -7,7 +7,9 @@ dotenv.config();
 const { PORT, DB_URL } = process.env;
 
 mongoose
-  .connect(DB_URL)
+  .connect(
+    'mongodb+srv://Danylez:stardew96@cluster0.aom5gxg.mongodb.net/Arenas-Gym',
+  )
   .then(() => console.log('CONNECTED DB'))
   .then(() =>
     app.listen(PORT, () => {

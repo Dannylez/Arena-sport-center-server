@@ -4,6 +4,7 @@ import SuperAdmin from '../models/superAdmin.js';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
+import Member from '../models/member.js';
 
 dotenv.config();
 const secret = process.env.SECRET;
@@ -59,7 +60,7 @@ const login = async (req, res) => {
   }
 };
 
-const verifyToken = async (req, res) => {
+/* const verifyToken = async (req, res) => {
   try {
     const token = req.headers.authorization.split(' ')[1];
     const payload = jwt.verify(token, secret);
@@ -73,6 +74,26 @@ const verifyToken = async (req, res) => {
     });
   } catch (error) {
     console.error(error);
+  }
+}; */
+
+const verifyToken = async (req, res) => {
+  try {
+    const members = await Member.find()
+      .populate({
+        path: 'classes',
+        populate: { path: 'trainer' },
+      })
+      .populate('contracts');
+    return res.status(200).json({
+      data: members,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: 'Error',
+      data: undefined,
+      error,
+    });
   }
 };
 
