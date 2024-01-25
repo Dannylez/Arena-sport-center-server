@@ -33,7 +33,7 @@ const login = async (req, res) => {
           {
             sub: user._id,
             role: userType,
-            exp: Date.now() + 600000,
+            exp: Date.now() + 60 * 60 * 24 * 30 * 1000,
           },
           secret,
         );
