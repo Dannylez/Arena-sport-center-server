@@ -1,29 +1,9 @@
 import mongoose from 'mongoose';
 import { ObjectId } from 'mongodb';
-import jwt from 'jsonwebtoken';
 import Member from '../models/member.js';
-import dotenv from 'dotenv';
-
-dotenv.config();
-const secret = process.env.SECRET;
 
 const getAllMembers = async (req, res) => {
   try {
-    const token = req.headers?.authorization?.split(' ')[1];
-    const payload = jwt.verify(token, secret);
-    if (Date.now() > payload.exp) {
-      return res.status(401).json({
-        message: 'token expired',
-      });
-    }
-    res.status(200).json({
-      message: payload,
-    });
-  } catch (error) {
-    console.error(error);
-  }
-};
-/*   try {
     const members = await Member.find()
       .populate({
         path: 'classes',
@@ -40,7 +20,7 @@ const getAllMembers = async (req, res) => {
       error,
     });
   }
-}; */
+};
 
 const getMemberById = async (req, res) => {
   const { id } = req.params;
