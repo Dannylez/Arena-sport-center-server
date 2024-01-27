@@ -1,5 +1,4 @@
 import mongoose from 'mongoose';
-/* import bcryptPlugin from 'mongoose-bcrypt'; */
 
 const { Schema } = mongoose;
 
@@ -24,10 +23,9 @@ const trainerSchema = new Schema({
     type: String,
     minLength: 7,
     required: true,
-    /*     bcrypt: true, */
   },
   ci: {
-    type: Number,
+    type: String,
     minLength: 7,
     maxLength: 8,
     required: true,
@@ -37,29 +35,24 @@ const trainerSchema = new Schema({
     required: true,
   },
   phone: {
-    type: Number,
+    type: String,
     minLength: 7,
     maxLength: 15,
     required: true,
   },
   medService: {
     type: String,
-    required: true,
   },
   classes: {
     type: [mongoose.Schema.Types.ObjectId],
     ref: 'Class',
-    required: true,
   },
   fee: {
     type: Number,
-    required: true,
   },
   feeHistory: {
     type: [{ date: String, amount: Number }],
-    required: true,
   },
 });
 
-/* trainerSchema.plugin(bcryptPlugin); */
 export default mongoose.model('Trainer', trainerSchema);

@@ -7,7 +7,7 @@ const getAllTrainers = async (req, res) => {
   try {
     const trainers = await Trainer.find().populate({
       path: 'classes',
-      populate: { path: 'members' },
+      populate: [{ path: 'members' }, { path: 'activity' }],
     });
     return res.status(200).json({
       data: trainers,
@@ -97,7 +97,7 @@ const createTrainer = async (req, res) => {
   } catch (error) {
     return res.status(500).json({
       message: 'Error',
-      data: undefined,
+      data: error.message,
       error,
     });
   }
