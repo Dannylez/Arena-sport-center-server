@@ -26,7 +26,6 @@ const memberSchema = new Schema({
   },
   phone: {
     type: String,
-    minLength: 7,
     maxLength: 15,
   },
   email: {
@@ -48,12 +47,10 @@ const memberSchema = new Schema({
   classes: {
     type: [mongoose.Schema.Types.ObjectId],
     ref: 'Class',
-    required: true,
   },
   contracts: {
     type: [mongoose.Schema.Types.ObjectId],
     ref: 'Contract',
-    required: true,
   },
 });
 
@@ -69,9 +66,6 @@ memberSchema.pre('save', function (next) {
   }
   if (!this.healthCardUpToDate) {
     this.healthCardUpToDate = false;
-  }
-  if (!this.healthCardVigency) {
-    this.healthCardVigency = today;
   }
   next();
 });

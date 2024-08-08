@@ -32,7 +32,7 @@ const getTrainerById = async (req, res) => {
   try {
     const trainer = await Trainer.findById(id).populate({
       path: 'classes',
-      populate: { path: 'members' },
+      populate: [{ path: 'members' }, { path: 'activity' }],
     });
     if (!trainer) {
       return res.status(404).json({
@@ -125,6 +125,7 @@ const updateTrainer = async (req, res) => {
     feeHistory,
   } = req.body;
   try {
+    const salt = await bcrypt.genSalt(10);
     const trainerToUpdate = await Trainer.findById(id);
     if (!trainerToUpdate) {
       return res.status(404).json({
@@ -141,11 +142,12 @@ const updateTrainer = async (req, res) => {
         data: req.body,
       });
     }
+    const passHash = await bcrypt.hash(password, salt);
     const trainerUpdated = await Trainer.findByIdAndUpdate(id, {
       firstName,
       lastName,
       email,
-      password,
+      password: passHash,
       ci,
       birthDay,
       phone,

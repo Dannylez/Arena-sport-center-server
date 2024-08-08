@@ -79,32 +79,37 @@ const getClassById = async (req, res) => {
 const createClass = async (req, res) => {
   const { activity, day, startsAt, endsAt, room, trainer, members } = req.body;
   try {
-    const classExists = await existingClass(
-      req,
-      res,
-      day,
-      startsAt,
-      endsAt,
-      room,
-    );
-    if (classExists !== undefined) {
-      return res.status(400).json({
-        message: 'La clase se superpone con otra',
-        data: req.body,
+    if (isAfter(endsAt, startsAt)) {
+      const classExists = await existingClass(
+        req,
+        res,
+        day,
+        startsAt,
+        endsAt,
+        room,
+      );
+      if (classExists !== undefined) {
+        return res.status(400).json({
+          message: 'La clase se superpone con otra',
+          data: req.body,
+        });
+      }
+      const classCreated = await Class.create({
+        activity,
+        day,
+        startsAt,
+        endsAt,
+        room,
+        trainer,
+        members,
+      });
+      return res.status(200).json({
+        message: 'Clase creada exitosamente!',
+        data: classCreated,
       });
     }
-    const classCreated = await Class.create({
-      activity,
-      day,
-      startsAt,
-      endsAt,
-      room,
-      trainer,
-      members,
-    });
-    return res.status(200).json({
-      message: 'Clase creada exitosamente!',
-      data: classCreated,
+    return res.status(400).json({
+      message: 'No puede finalizar antes de empezar',
     });
   } catch (error) {
     return res.status(500).json({

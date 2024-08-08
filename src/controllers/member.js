@@ -7,7 +7,7 @@ const getAllMembers = async (req, res) => {
     const members = await Member.find()
       .populate({
         path: 'classes',
-        populate: { path: 'trainer' },
+        populate: [{ path: 'trainer' }, { path: 'activity' }],
       })
       .populate('contracts');
     return res.status(200).json({
